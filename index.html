@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My example todo list</title>
+</head>
+<body>
+<div id="app">
+  {{ message }}
+
+  <ol
+    v-for="todo in todos"
+    :key="todo.id"
+  >
+    <todo-item
+      :text="todo.text"
+      :is-complete="todo.isComplete"
+      @clicked="toggleTodo(todo)"
+    ></todo-item>
+  </ol>
+</div>
+</body>
+</html>
+
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+  Vue.component('todo-item', {
+    props: {
+      text: {
+        type: String,
+        default: 'My example todo',
+      },
+      isComplete: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    data() {
+      return {
+      };
+    },
+    computed: {},
+    methods: {
+      toggle() {
+        this.$emit('clicked');
+      }
+    },
+    template: `
+      <li
+        :style="!$props.isComplete || { textDecoration: \'line-through\' }"
+        v-on:click="toggle"
+      >
+        {{ $props.text }}
+      </li>
+    `,
+  });
+
+  let app = new Vue({
+    el: '#app',
+    data: {
+      todos: [
+        {
+          id: 1,
+          text: 'My first todo',
+          isComplete: false,
+        },
+        {
+          id: 2,
+          text: 'My second todo, which is complete',
+          isComplete: true,
+        },
+      ],
+      message: 'Hello world!',
+    },
+
+    methods: {
+      toggleTodo(todo) {
+        return todo.isComplete = !todo.isComplete;
+      }
+    }
+  });
+</script>
